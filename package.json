@@ -410,7 +410,8 @@
     "yallist": "^3.0.3"
   },
   "scripts": {
-    "test": "jest test"
+    "test": "jest test",
+    "build":"tsc --build tsconfig.json"
   },
   "repository": {
     "type": "git",

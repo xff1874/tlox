@@ -218,3 +218,4 @@ var Scanner = /** @class */ (function () {
     return Scanner;
 }());
 exports.default = Scanner;
+//# sourceMappingURL=Scanner.js.map

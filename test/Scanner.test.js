@@ -1,7 +1,8 @@
 /* global describe, it */
+// import Scanner from "./build/Scanner"
 const fs = require('fs')
 const assert = require('assert')
-const Scanner = require('../src/Scanner')
+const Scanner = require('../build/Scanner')
 
 test('produces tokens for basic arithmetic', () => {
     const source = fs.readFileSync('./examples/simple.lox', 'utf-8')

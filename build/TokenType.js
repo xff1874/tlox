@@ -47,3 +47,4 @@ var TokenType;
     TokenType[TokenType["EOF"] = 38] = "EOF";
 })(TokenType || (TokenType = {}));
 exports.default = TokenType;
+//# sourceMappingURL=TokenType.js.map
