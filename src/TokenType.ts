@@ -1,0 +1,22 @@
+enum TokenType{
+    //单个字符的tokens
+    LEFT_PAREN,RIGHT_PAREN,LEFT_BRACE,RIGHT_BRACE,
+    COMMA, DOT, MINUS, PLUS, SEMICOLON, SLASH,STAR,
+
+    //一个或2个字符的tokens
+    BANG, BANG_EQUAL,
+    EQUAL, EQUAL_EQUAL,
+    GREATER, GREATER_EQUAL,
+    LESS, LESS_EQUAL,
+
+    //字符变量
+    IDENTIFIER,STRING,NUMBER,
+
+    //关键字
+    AND,CLASS,ELSE,FALSE,FUN,FOR,IF,NIL,OR,
+    PRINT,RETURN,SUPER,THIS,VAR,WHILE,TRUE,
+
+    EOF
+}
+
+export default TokenType;
