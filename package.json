@@ -1,5 +1,6 @@
 {
   "devDependencies": {
+    "@types/node": "^12.7.4",
     "jest": "^24.9.0"
   },
   "name": "tlox",
@@ -411,8 +412,8 @@
   },
   "scripts": {
     "test": "jest test",
-    "test:debug":"node --inspect-brk node_modules/.bin/jest test --runInBand",
-    "build":"tsc --build tsconfig.json"
+    "test:debug": "node --inspect-brk node_modules/.bin/jest test --runInBand",
+    "build": "tsc --build tsconfig.json"
   },
   "repository": {
     "type": "git",

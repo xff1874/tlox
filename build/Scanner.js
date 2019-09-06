@@ -5,6 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var Token_1 = __importDefault(require("./Token"));
 var TokenType_1 = __importDefault(require("./TokenType"));
+// import Lox from "./Lox";
 var Scanner = /** @class */ (function () {
     function Scanner(source) {
         this.hadError = false;
