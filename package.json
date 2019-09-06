@@ -411,6 +411,7 @@
   },
   "scripts": {
     "test": "jest test",
+    "test:debug":"node --inspect-brk node_modules/.bin/jest test --runInBand",
     "build":"tsc --build tsconfig.json"
   },
   "repository": {
