@@ -3,8 +3,15 @@ const path = require("path");
 
 function defineType(stream, baseName, className, fields) {
   stream.write(` export class ${className} extends ${baseName} { \n`);
-  //constructor
+
   let filedCollection = fields.split(",");
+  //处理field
+  for (let fv of filedCollection) {
+    let name = fv.trim().split(" ");
+    stream.write(`${name[1]}:${name[0]}; \n`);
+  }
+
+  //constructor
   let cstr = "";
   for (let f of filedCollection) {
     let name = f.trim().split(" ");
@@ -18,11 +25,11 @@ function defineType(stream, baseName, className, fields) {
     stream.write(`  this.${name[1]} = ${name[1]}; \n`);
   }
   stream.write("      } \n");
-  //处理field
-  for (let fv of filedCollection) {
-    let name = fv.trim().split(" ");
-    stream.write(`${name[1]}:${name[0]}; \n`);
-  }
+
+  //处理visitor方法
+  stream.write(
+    ` accept<R>(v:Visitor<R>){ return v.visit${className}${baseName}(this)}; \n `
+  );
 
   stream.write("  } \n");
 }
@@ -43,6 +50,7 @@ function defineAst(baseName, types) {
   let stream = fs.createWriteStream(tsFile, { flag: "a" });
   stream.write(`import Token from "./Token";\n `);
   stream.write("abstract class " + baseName + " {");
+  stream.write(`abstract accept<R>(v:Visitor<R>):R ;`);
   stream.write("} \n");
   defineVisitor(stream, baseName, types);
   for (let type of types) {

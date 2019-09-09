@@ -1,5 +1,7 @@
 import Token from "./Token";
-abstract class Expr {}
+abstract class Expr {
+  abstract accept<R>(v: Visitor<R>): R;
+}
 interface Visitor<R> {
   visitBinaryExpr(expr: Binary): R;
   visitGroupingExpr(expr: Grouping): R;
@@ -7,36 +9,48 @@ interface Visitor<R> {
   visitUnaryExpr(expr: Unary): R;
 }
 export class Binary extends Expr {
+  left: Expr;
+  operator: Token;
+  right: Expr;
   constructor(left: Expr, operator: Token, right: Expr) {
     super();
     this.left = left;
     this.operator = operator;
     this.right = right;
   }
-  left: Expr;
-  operator: Token;
-  right: Expr;
+  accept<R>(v: Visitor<R>) {
+    return v.visitBinaryExpr(this);
+  }
 }
 export class Grouping extends Expr {
+  expression: Expr;
   constructor(expression: Expr) {
     super();
     this.expression = expression;
   }
-  expression: Expr;
+  accept<R>(v: Visitor<R>) {
+    return v.visitGroupingExpr(this);
+  }
 }
 export class Literal extends Expr {
+  value: Object;
   constructor(value: Object) {
     super();
     this.value = value;
   }
-  value: Object;
+  accept<R>(v: Visitor<R>) {
+    return v.visitLiteralExpr(this);
+  }
 }
 export class Unary extends Expr {
+  operator: Token;
+  right: Expr;
   constructor(operator: Token, right: Expr) {
     super();
     this.operator = operator;
     this.right = right;
   }
-  operator: Token;
-  right: Expr;
+  accept<R>(v: Visitor<R>) {
+    return v.visitUnaryExpr(this);
+  }
 }
