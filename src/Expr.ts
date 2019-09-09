@@ -1,5 +1,11 @@
 import Token from "./Token";
 abstract class Expr {}
+interface Visitor<R> {
+  visitBinaryExpr(expr: Binary): R;
+  visitGroupingExpr(expr: Grouping): R;
+  visitLiteralExpr(expr: Literal): R;
+  visitUnaryExpr(expr: Unary): R;
+}
 export class Binary extends Expr {
   constructor(left: Expr, operator: Token, right: Expr) {
     super();
