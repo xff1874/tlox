@@ -9,8 +9,6 @@ const { Binary, Grouping, Literal, Unary } = require("../build/Expr");
 const { AstPrinter } = require("../build/AstPrinter");
 const Token = require("../build/Token");
 
-debugger;
-
 test("produces tokens for basic arithmetic", () => {
   const source = fs.readFileSync("./examples/simple.lox", "utf-8");
 

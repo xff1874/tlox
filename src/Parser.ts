@@ -2,9 +2,10 @@ import Token from "./Token";
 import { Expr, Binary, Unary, Literal, Grouping } from "./Expr";
 import TokenType from "./TokenType";
 
-class Parser {
+export default class Parser {
   tokens: Token[]; //all input tokens
   current: number = 0; // index pointing to tokens.
+  isValid: boolean = true;
 
   constructor(tokens: Token[]) {
     this.tokens = tokens;
@@ -14,6 +15,7 @@ class Parser {
     return this.equality();
   }
 
+  //equality → comparison ( ( "!=" | "==" ) comparison )* ;
   equality(): Expr {
     let expr: Expr = this.comparison();
     while (this.match(TokenType.BANG_EQUAL, TokenType.EQUAL_EQUAL)) {
@@ -142,8 +144,9 @@ class Parser {
     if (token.type == TokenType.EOF) {
       throw new Error(token.line + "at end" + message);
     } else {
-      throw new Error(token.line + `at ${token.lexeme} ${message}`);
+      throw new Error(` ${token.line}  at ${token.lexeme} ${message}`);
     }
+    this.isValid = false;
   }
 
   /**discard all tokens until next statement */
