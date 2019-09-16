@@ -18,6 +18,7 @@ test("parser", () => {
   expect(p.isValid).toBe(true);
 });
 
+debugger;
 test(" statement ", () => {
   const source = fs.readFileSync("./examples/stmt.lox", "utf-8");
   const tokens = new Scanner.default(source).scanTokens();

@@ -29,12 +29,14 @@ class Interpreter implements Visitor<Object>, StmtVistor<Object> {
         this.checkNumberOperands(expr.operator, left, right);
         return Number(left) * Number(right);
       case TokenType.PLUS:
-        if (left instanceof Number && right instanceof Number) {
+        if (typeof left == "number" && typeof right == "number") {
           return Number(left) + Number(right);
-        } else if (left instanceof String && right instanceof String) {
+        } else if (typeof left == "string" && typeof right == "string") {
           return String(left) + String(right);
-        }
-        throw new Error(`${expr.operator} Operands must be numbers or string`);
+        } else
+          throw new Error(
+            `${expr.operator} Operands must be numbers or string`
+          );
       case TokenType.GREATER:
         this.checkNumberOperands(expr.operator, left, right);
         return Number(left) > Number(right);
@@ -89,12 +91,12 @@ class Interpreter implements Visitor<Object>, StmtVistor<Object> {
     return true;
   }
   checkNumberOperand(operator: Token, operand: Object) {
-    if (operand instanceof Number) return;
+    if (typeof operand == "number") return;
     throw new Error(`${operator} operand must be a number`);
   }
 
   checkNumberOperands(operator: Token, left: Object, right: Object) {
-    if (left instanceof Number && right instanceof Number) return;
+    if (typeof left === "number" && typeof right === "number") return;
     throw new Error(`${operator} Oprands must be number`);
   }
 
@@ -112,3 +114,5 @@ class Interpreter implements Visitor<Object>, StmtVistor<Object> {
     }
   }
 }
+
+export default Interpreter;
