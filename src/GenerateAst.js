@@ -68,3 +68,8 @@ defineAst("Expr", [
   "Literal  : Object value",
   "Unary    : Token operator, Expr right"
 ]);
+
+defineAst("Stmt", [
+  "Expression : Expr expression",
+  "Print      : Expr expression"
+]);
