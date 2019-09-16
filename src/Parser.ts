@@ -1,6 +1,7 @@
 import Token from "./Token";
 import { Expr, Binary, Unary, Literal, Grouping } from "./Expr";
 import TokenType from "./TokenType";
+import { Stmt, Print, Expression } from "./Stmt";
 
 export default class Parser {
   tokens: Token[]; //all input tokens
@@ -171,12 +172,34 @@ export default class Parser {
     this.advance();
   }
 
-  parse(): Expr {
-    try {
-      return this.expression();
-    } catch (err) {
-      //do some code handle
-      throw new Error(err);
+  parse(): Stmt[] {
+    // try {
+    //   return this.expression();
+    // } catch (err) {
+    //   //do some code handle
+    //   throw new Error(err);
+    // }
+    let statements = [];
+    while (!this.isAtEnd()) {
+      statements.push(this.statement());
     }
+    return statements;
+  }
+
+  statement(): Stmt {
+    if (this.match(TokenType.PRINT)) return this.printStatement();
+    return this.expressionStatement();
+  }
+
+  printStatement(): Stmt {
+    let val = this.expression();
+    this.consume(TokenType.SEMICOLON, `Expect ; after value.`);
+    return new Print(val);
+  }
+
+  expressionStatement(): Stmt {
+    let expr = this.expression();
+    this.consume(TokenType.SEMICOLON, `Excpect ; after expression`);
+    return new Expression(expr);
   }
 }

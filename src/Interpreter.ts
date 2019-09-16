@@ -1,8 +1,19 @@
 import { Visitor, Binary, Grouping, Literal, Unary, Expr } from "./Expr";
 import TokenType from "./TokenType";
 import Token from "./Token";
+import { Visitor as StmtVistor, Stmt, Expression, Print } from "./Stmt";
 
-class Interpreter implements Visitor<Object> {
+class Interpreter implements Visitor<Object>, StmtVistor<Object> {
+  visitExpressionStmt(stmt: Expression): Object {
+    return this.evaluate(stmt.expression);
+  }
+  visitPrintStmt(stmt: Print): Object {
+    let val = this.evaluate(stmt.expression);
+    console.log(JSON.stringify(val));
+    let r = JSON.stringify(val);
+    console.log(r);
+    return r;
+  }
   visitBinaryExpr(expr: Binary): Object {
     let left = this.evaluate(expr.left);
     let right = this.evaluate(expr.right);
@@ -87,10 +98,15 @@ class Interpreter implements Visitor<Object> {
     throw new Error(`${operator} Oprands must be number`);
   }
 
-  interpret(expression: Expr) {
+  execute(stmt: Stmt) {
+    stmt.accept(this);
+  }
+
+  interpret(statements: Stmt[]) {
     try {
-      let val = this.evaluate(expression);
-      console.log(JSON.stringify(val));
+      for (let statement of statements) {
+        this.execute(statement);
+      }
     } catch (err) {
       console.error(err);
     }

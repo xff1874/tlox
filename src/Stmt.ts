@@ -1,9 +1,9 @@
 import Token from "./Token";
 import { Expr } from "./Expr";
-abstract class Stmt {
+export abstract class Stmt {
   abstract accept<R>(v: Visitor<R>): R;
 }
-interface Visitor<R> {
+export interface Visitor<R> {
   visitExpressionStmt(stmt: Expression): R;
   visitPrintStmt(stmt: Print): R;
 }
