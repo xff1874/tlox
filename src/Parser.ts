@@ -1,7 +1,7 @@
 import Token from "./Token";
-import { Expr, Binary, Unary, Literal, Grouping } from "./Expr";
+import { Expr, Binary, Unary, Literal, Grouping, Variable } from "./Expr";
 import TokenType from "./TokenType";
-import { Stmt, Print, Expression } from "./Stmt";
+import { Stmt, Print, Expression, Var } from "./Stmt";
 
 export default class Parser {
   tokens: Token[]; //all input tokens
@@ -123,7 +123,7 @@ export default class Parser {
   primary(): Expr {
     if (this.match(TokenType.FALSE)) return new Literal(false);
     if (this.match(TokenType.TRUE)) return new Literal(true);
-    if (this.match(TokenType.NIL)) return new Literal(null);
+    if (this.match(TokenType.NIL)) return new Literal({});
 
     if (this.match(TokenType.NUMBER, TokenType.STRING)) {
       return new Literal(this.previous().literal);
@@ -133,10 +133,15 @@ export default class Parser {
       this.consume(TokenType.RIGHT_PAREN, "expect ) after expresion");
       return new Grouping(expr);
     }
+
+    if (this.match(TokenType.IDENTIFIER)) {
+      return new Variable(this.previous());
+    }
+
     throw this.error(this.peek(), "Expect expression.");
   }
 
-  consume(type: TokenType, message: string) {
+  consume(type: TokenType, message: string): any {
     if (this.check(type)) return this.advance();
     this.error(this.peek(), message);
   }
@@ -172,7 +177,7 @@ export default class Parser {
     this.advance();
   }
 
-  parse(): Stmt[] {
+  parse() {
     // try {
     //   return this.expression();
     // } catch (err) {
@@ -181,9 +186,30 @@ export default class Parser {
     // }
     let statements = [];
     while (!this.isAtEnd()) {
-      statements.push(this.statement());
+      statements.push(this.declaration());
     }
     return statements;
+  }
+
+  declaration() {
+    try {
+      if (this.match(TokenType.VAR)) return this.varDeclaration();
+      return this.statement();
+    } catch (err) {
+      this.synchonize();
+    }
+  }
+
+  varDeclaration() {
+    let name = this.consume(TokenType.IDENTIFIER, `Expect variable name`);
+    let initializer;
+    let v;
+    if (this.match(TokenType.EQUAL)) {
+      initializer = this.expression();
+      v = new Var(name, initializer);
+    }
+    this.consume(TokenType.SEMICOLON, `Expectd ; after variable declaration`);
+    return v;
   }
 
   statement(): Stmt {

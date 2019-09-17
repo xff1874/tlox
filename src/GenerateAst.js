@@ -35,7 +35,7 @@ function defineType(stream, baseName, className, fields) {
 }
 
 function defineVisitor(stream, baseName, types) {
-  stream.write(`interface Visitor<R> { \n`);
+  stream.write(`export interface Visitor<R> { \n`);
   for (let t of types) {
     let typeName = t.split(":")[0].trim();
     stream.write(
@@ -49,7 +49,7 @@ function defineAst(baseName, types) {
   let tsFile = path.join(__dirname, `${baseName}.ts`);
   let stream = fs.createWriteStream(tsFile, { flag: "a" });
   stream.write(`import Token from "./Token";\n `);
-  stream.write("abstract class " + baseName + " {");
+  stream.write("export abstract class " + baseName + " {");
   stream.write(`abstract accept<R>(v:Visitor<R>):R ;`);
   stream.write("} \n");
   defineVisitor(stream, baseName, types);
@@ -66,10 +66,12 @@ defineAst("Expr", [
   "Binary   : Expr left, Token operator, Expr right",
   "Grouping : Expr expression",
   "Literal  : Object value",
-  "Unary    : Token operator, Expr right"
+  "Unary    : Token operator, Expr right",
+  "Variable : Token name"
 ]);
 
 defineAst("Stmt", [
   "Expression : Expr expression",
-  "Print      : Expr expression"
+  "Print      : Expr expression",
+  "Var        : Token name, Expr initializer"
 ]);

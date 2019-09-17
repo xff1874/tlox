@@ -4,12 +4,17 @@ import Token from "./Token";
 import { Visitor as StmtVistor, Stmt, Expression, Print } from "./Stmt";
 
 class Interpreter implements Visitor<Object>, StmtVistor<Object> {
+  visitVariableExpr(expr: import("./Expr").Variable): Object {
+    throw new Error("Method not implemented.");
+  }
+  visitVarStmt(stmt: import("./Stmt").Var): Object {
+    throw new Error("Method not implemented.");
+  }
   visitExpressionStmt(stmt: Expression): Object {
     return this.evaluate(stmt.expression);
   }
   visitPrintStmt(stmt: Print): Object {
     let val = this.evaluate(stmt.expression);
-    console.log(JSON.stringify(val));
     let r = JSON.stringify(val);
     console.log(r);
     return r;
