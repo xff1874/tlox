@@ -2,13 +2,21 @@ import { Visitor, Binary, Grouping, Literal, Unary, Expr } from "./Expr";
 import TokenType from "./TokenType";
 import Token from "./Token";
 import { Visitor as StmtVistor, Stmt, Expression, Print } from "./Stmt";
+import Environment from "./Environment";
 
 class Interpreter implements Visitor<Object>, StmtVistor<Object> {
-  visitVariableExpr(expr: import("./Expr").Variable): Object {
-    throw new Error("Method not implemented.");
+  private environment = new Environment();
+  visitVariableExpr(expr: import("./Expr").Variable): any {
+    return this.environment.get(expr.name);
   }
   visitVarStmt(stmt: import("./Stmt").Var): Object {
-    throw new Error("Method not implemented.");
+    let val;
+    if (stmt.initializer != null) {
+      val = this.evaluate(stmt.initializer);
+    }
+    this.environment.define(stmt.name.lexeme, val);
+    return this.environment;
+    // return null;
   }
   visitExpressionStmt(stmt: Expression): Object {
     return this.evaluate(stmt.expression);

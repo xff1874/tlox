@@ -1,6 +1,9 @@
 import { Visitor, Binary, Grouping, Literal, Unary, Expr } from "./Expr";
 
 export class AstPrinter implements Visitor<string> {
+  visitVariableExpr(expr: import("./Expr").Variable): string {
+    throw new Error("Method not implemented.");
+  }
   visitBinaryExpr(expr: Binary): string {
     return this.parenthesize(expr.operator.lexeme, expr.left, expr.right);
   }
