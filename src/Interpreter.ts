@@ -5,15 +5,24 @@ import { Visitor as StmtVistor, Stmt, Expression, Print } from "./Stmt";
 import Environment from "./Environment";
 
 class Interpreter implements Visitor<Object>, StmtVistor<Object> {
+  environment: Environment;
+  constructor() {
+    this.environment = new Environment();
+  }
+  visitVariableExpr(expr: import("./Expr").Variable): any {
+    return this.environment.get(expr.name);
+  }
+
+  visitBlockStmt(stmt: import("./Stmt").Block): any {
+    this.executeBlock(stmt.statements, new Environment(this.environment));
+    return null;
+  }
   visitAssignExpr(expr: import("./Expr").Assign): Object {
     let value = this.evaluate(expr.value);
     this.environment.assign(expr.name, value);
     return value;
   }
-  private environment = new Environment();
-  visitVariableExpr(expr: import("./Expr").Variable): any {
-    return this.environment.get(expr.name);
-  }
+
   visitVarStmt(stmt: import("./Stmt").Var): Object {
     let val;
     if (stmt.initializer != null) {
@@ -129,6 +138,19 @@ class Interpreter implements Visitor<Object>, StmtVistor<Object> {
       }
     } catch (err) {
       console.error(err);
+    }
+  }
+
+  executeBlock(statements: Stmt[], env: Environment) {
+    let prev = this.environment; //temp store
+    try {
+      this.environment = env;
+
+      statements.forEach(stmt => {
+        this.execute(stmt);
+      });
+    } finally {
+      this.environment = prev;
     }
   }
 }
