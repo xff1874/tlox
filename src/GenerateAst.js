@@ -63,6 +63,7 @@ function defineAst(baseName, types) {
 }
 
 defineAst("Expr", [
+  "Assign   : Token name, Expr value",
   "Binary   : Expr left, Token operator, Expr right",
   "Grouping : Expr expression",
   "Literal  : Object value",

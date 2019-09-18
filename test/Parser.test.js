@@ -6,7 +6,6 @@ const path = require("path");
 const Scanner = require("../build/Scanner");
 const TokenType = require("../build/TokenType");
 const { Binary, Grouping, Literal, Unary } = require("../build/Expr");
-const { AstPrinter } = require("../build/AstPrinter");
 const Token = require("../build/Token");
 const Parser = require("../build/Parser");
 const Interpreter = require("../build/Interpreter");

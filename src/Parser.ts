@@ -1,5 +1,13 @@
 import Token from "./Token";
-import { Expr, Binary, Unary, Literal, Grouping, Variable } from "./Expr";
+import {
+  Expr,
+  Binary,
+  Unary,
+  Literal,
+  Grouping,
+  Variable,
+  Assign
+} from "./Expr";
 import TokenType from "./TokenType";
 import { Stmt, Print, Expression, Var } from "./Stmt";
 
@@ -12,8 +20,26 @@ export default class Parser {
     this.tokens = tokens;
   }
 
-  expression(): Expr {
-    return this.equality();
+  expression(): Expr | any {
+    // return this.equality();
+    return this.assignment();
+  }
+
+  assignment() {
+    let expr = this.equality();
+
+    if (this.match(TokenType.EQUAL)) {
+      let equals = this.previous();
+      let value: any = this.assignment();
+
+      if (expr instanceof Variable) {
+        let name = expr.name;
+        return new Assign(name, value);
+      }
+      this.error(equals, `Invalid assignment target`);
+    }
+
+    return expr;
   }
 
   //equality → comparison ( ( "!=" | "==" ) comparison )* ;

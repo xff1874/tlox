@@ -11,6 +11,14 @@ export default class Environment {
     this.values.set(name, value);
   }
 
+  assign(name: Token, value: Object): void {
+    if (this.values.has(name.lexeme)) {
+      this.values.set(name.lexeme, value);
+      return;
+    }
+    throw new Error(`Runtime Error undefined variable ${name.lexeme}`);
+  }
+
   get(name: Token) {
     if (this.values.has(name.lexeme)) {
       return this.values.get(name.lexeme);

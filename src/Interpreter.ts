@@ -5,6 +5,11 @@ import { Visitor as StmtVistor, Stmt, Expression, Print } from "./Stmt";
 import Environment from "./Environment";
 
 class Interpreter implements Visitor<Object>, StmtVistor<Object> {
+  visitAssignExpr(expr: import("./Expr").Assign): Object {
+    let value = this.evaluate(expr.value);
+    this.environment.assign(expr.name, value);
+    return this.environment;
+  }
   private environment = new Environment();
   visitVariableExpr(expr: import("./Expr").Variable): any {
     return this.environment.get(expr.name);
