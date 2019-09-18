@@ -8,7 +8,7 @@ class Interpreter implements Visitor<Object>, StmtVistor<Object> {
   visitAssignExpr(expr: import("./Expr").Assign): Object {
     let value = this.evaluate(expr.value);
     this.environment.assign(expr.name, value);
-    return this.environment;
+    return value;
   }
   private environment = new Environment();
   visitVariableExpr(expr: import("./Expr").Variable): any {
