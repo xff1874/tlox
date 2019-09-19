@@ -5,6 +5,12 @@ import { Visitor as StmtVistor, Stmt, Expression, Print } from "./Stmt";
 import Environment from "./Environment";
 
 class Interpreter implements Visitor<Object>, StmtVistor<Object> {
+  visitWhileStmt(stmt: import("./Stmt").While): any {
+    while (this.isTruthy(this.evaluate(stmt.condition))) {
+      this.execute(stmt.body);
+    }
+    // return null;
+  }
   visitLogicalExpr(expr: import("./Expr").Logical): Object {
     let left = this.evaluate(expr.left);
     if (expr.operator.type == TokenType.OR) {

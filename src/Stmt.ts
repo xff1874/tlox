@@ -9,6 +9,7 @@ export interface Visitor<R> {
   visitIfStmt(stmt: If): R;
   visitPrintStmt(stmt: Print): R;
   visitVarStmt(stmt: Var): R;
+  visitWhileStmt(stmt: While): R;
 }
 export class Block extends Stmt {
   statements: Stmt[];
@@ -64,5 +65,17 @@ export class Var extends Stmt {
   }
   accept<R>(v: Visitor<R>) {
     return v.visitVarStmt(this);
+  }
+}
+export class While extends Stmt {
+  condition: Expr;
+  body: Stmt;
+  constructor(condition: Expr, body: Stmt) {
+    super();
+    this.condition = condition;
+    this.body = body;
+  }
+  accept<R>(v: Visitor<R>) {
+    return v.visitWhileStmt(this);
   }
 }
