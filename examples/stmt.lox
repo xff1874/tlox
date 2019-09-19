@@ -29,3 +29,8 @@ var c = "global c";
 print a;
 print b;
 print c;
+
+var t= 1;
+if(t){
+    print t;
+}

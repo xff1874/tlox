@@ -5,6 +5,14 @@ import { Visitor as StmtVistor, Stmt, Expression, Print } from "./Stmt";
 import Environment from "./Environment";
 
 class Interpreter implements Visitor<Object>, StmtVistor<Object> {
+  visitIfStmt(stmt: import("./Stmt").If): any {
+    if (this.isTruthy(this.evaluate(stmt.condition))) {
+      this.execute(stmt.thenBranch);
+    } else if (stmt.elseBranch != null) {
+      this.execute(stmt.elseBranch);
+    }
+    return null;
+  }
   environment: Environment;
   constructor() {
     this.environment = new Environment();

@@ -9,7 +9,7 @@ import {
   Assign
 } from "./Expr";
 import TokenType from "./TokenType";
-import { Stmt, Print, Expression, Var, Block } from "./Stmt";
+import { Stmt, Print, Expression, Var, Block, If } from "./Stmt";
 
 export default class Parser {
   tokens: Token[]; //all input tokens
@@ -240,6 +240,7 @@ export default class Parser {
 
   statement(): Stmt {
     if (this.match(TokenType.PRINT)) return this.printStatement();
+    if (this.match(TokenType.IF)) return this.ifStatement();
     if (this.match(TokenType.LEFT_BRACE)) {
       let stmts = this.block();
       if (stmts.length) {
@@ -259,6 +260,19 @@ export default class Parser {
     let expr = this.expression();
     this.consume(TokenType.SEMICOLON, `Excpect ; after expression`);
     return new Expression(expr);
+  }
+
+  ifStatement() {
+    this.consume(TokenType.LEFT_PAREN, `Expected (  after if`);
+    let condition = this.expression();
+    this.consume(TokenType.RIGHT_PAREN, `Expected ) after if condition`);
+
+    let thenBranch = this.statement();
+    let elseBranch = null;
+    if (this.match(TokenType.ELSE)) {
+      elseBranch = this.statement();
+    }
+    return new If(condition, thenBranch, elseBranch);
   }
 
   block(): any {
