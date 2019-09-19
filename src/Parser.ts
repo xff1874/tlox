@@ -6,7 +6,8 @@ import {
   Literal,
   Grouping,
   Variable,
-  Assign
+  Assign,
+  Logical
 } from "./Expr";
 import TokenType from "./TokenType";
 import { Stmt, Print, Expression, Var, Block, If } from "./Stmt";
@@ -26,7 +27,8 @@ export default class Parser {
   }
 
   assignment() {
-    let expr = this.equality();
+    // let expr = this.equality();
+    let expr = this.or();
 
     if (this.match(TokenType.EQUAL)) {
       let equals = this.previous();
@@ -37,6 +39,28 @@ export default class Parser {
         return new Assign(name, value);
       }
       this.error(equals, `Invalid assignment target`);
+    }
+
+    return expr;
+  }
+
+  or() {
+    let expr = this.and();
+    while (this.match(TokenType.OR)) {
+      let operator = this.previous();
+      let right = this.and();
+      expr = new Logical(expr, operator, right);
+    }
+    return expr;
+  }
+
+  and(): Expr {
+    let expr = this.equality();
+
+    while (this.match(TokenType.AND)) {
+      let operator = this.previous();
+      let right = this.equality();
+      expr = new Logical(expr, operator, right);
     }
 
     return expr;
@@ -149,7 +173,7 @@ export default class Parser {
   primary(): Expr {
     if (this.match(TokenType.FALSE)) return new Literal(false);
     if (this.match(TokenType.TRUE)) return new Literal(true);
-    if (this.match(TokenType.NIL)) return new Literal({});
+    if (this.match(TokenType.NIL)) return new Literal("");
 
     if (this.match(TokenType.NUMBER, TokenType.STRING)) {
       return new Literal(this.previous().literal);

@@ -34,3 +34,9 @@ var t= 1;
 if(t){
     print t;
 }
+
+print true and "hi";
+print nil or "yes";
+print 2 or "other";
+
+

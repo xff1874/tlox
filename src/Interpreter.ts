@@ -5,6 +5,16 @@ import { Visitor as StmtVistor, Stmt, Expression, Print } from "./Stmt";
 import Environment from "./Environment";
 
 class Interpreter implements Visitor<Object>, StmtVistor<Object> {
+  visitLogicalExpr(expr: import("./Expr").Logical): Object {
+    let left = this.evaluate(expr.left);
+    if (expr.operator.type == TokenType.OR) {
+      if (this.isTruthy(left)) return left;
+    } else {
+      if (!this.isTruthy(left)) return left;
+    }
+
+    return this.evaluate(expr.right);
+  }
   visitIfStmt(stmt: import("./Stmt").If): any {
     if (this.isTruthy(this.evaluate(stmt.condition))) {
       this.execute(stmt.thenBranch);
